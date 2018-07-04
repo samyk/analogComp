@@ -8,10 +8,19 @@ Atmel microcontrollers
 
 Written by Leonardo Miliani <leonardo AT leonardomiliani DOT com>
 
+Add Teensy 3.x/LC support
+
+Written by Hisashi Ito <info AT mewpro DOT cc>
+Additional improvements by Samy Kamkar <code@samy.pl> / https://samy.pl
 
 ***********************
 Version history
 
+v. 1.3.3:  MK64FX512VMD12 (Teensy 3.5) and MK66FX1M0VMD18 (Teensy 3.6) support
+v. 1.3.2:  ATtiny441/841 and ATtiny1634 support
+           fixed a bug in handling digital buffer (changed to no touch at all)
+v. 1.3.1:  MKL26Z64 (Teensy LC) support
+v. 1.3.0:  MK20DX128/256 (Teensy 3.x) support
 v. 1.2.1:  fixed a bug that let the ADC off after a comparison
 v. 1.2.0:  fixed a bug into the conversion from analog to phisical pins
 v. 1.1.1:  now it calls the correct interrupt vector for the MCU in use
@@ -121,6 +130,10 @@ and Arduino boards:
 - Atmega48/88/168/328 (Arduino UNO)
 - Atmega640/1280/1281/2560/2561 (Arduino MEGA)
 - Atmega32U4** (Arduino Leonardo)
+And also works with freescale microcontrollers on Teensy 3.x boards:
+- MK20DX128/256***
+- MK64FX512VMD12
+- MK66FX1M0VMD18
 
 Specific limitations:
 * Attiny2313/4313:
@@ -131,7 +144,75 @@ is allowed for AIN-.
 the Atmega32U4 AIN- can only be connected to an analog input pin because
 it has no AIN1 pin.
 
-***********************
+*** MK20DX128/256
+There are two analog comparators on MK20DX128 and three on MK20DX256.
+Second or third can be accessed by the object analogComparator1 or
+analogComparator2 respectively.
+AIN- and AIN+ are respectively called INM and INP in freescale's terminology
+and both of these can be assigned to following signals.
+analogComparator (CMP0):
+- 0. CMP0_IN0 (K20Pin 51 = TeensyPin 11)
+- 1. CMP0_IN1 (K20Pin 52 = TeensyPin 12)
+- 2. CMP0_IN2 (K20Pin 53 = TeensyPin 28)
+- 3. CMP0_IN3 (K20Pin 54 = TeensyPin 27)
+- 4. CMP0_IN4 (K20Pin 55 = TeensyPin 29)
+- 5. VREF Output/CMP0_IN5 (K20Pin 17)
+- 6. Bandgap
+- 7. 6b DAC0 Reference
+analogComparator1 (CMP1):
+- 0. CMP1_IN0 (K20Pin 45 = TeensyPin 23)
+- 1. CMP1_IN1 (K20Pin 46 = TeensyPin 9)
+- 3. 12-bit DAC0_OUT/CMP1_IN3 (K20Pin 18 = TeensyPin 40/A14/DAC (Teensy 3.[12] only))
+- 5. VREF Output/CMP1_IN5 (K20Pin 17) 
+- 6. Bandgap
+- 7. 6b DAC1 Reference
+analogComparator2 (CMP2 Teensy 3.[12] only):
+- 0. CMP2_IN0 (K20Pin 28 = TeensyPin 3)
+- 1. CMP2_IN1 (K20Pin 29 = TeensyPin 4)
+- 6. Bandgap
+- 7. 6b DAC2 Reference
+
+*** MKL26Z64
+AIN- and AIN+ are respectively called INM and INP in freescale's terminology
+and both of these can be assigned to following signals.
+analogComparator (CMP0):
+- 0. CMP0_IN0 (KL26Pin 39 = TeensyPin 11)
+- 1. CMP0_IN1 (KL26Pin 40 = TeensyPin 12)
+- 4. CMP0_IN4 (KL26Pin 14 = TeensyPin 26)
+- 5. VREF Output/CMP0_IN5 (KL26Pin 13)
+- 6. Bandgap
+- 7. 6b DAC0 Reference
+
+*** MK64FX512VMD12/MK66FX1M0VMD18
+There are three analog comparators on MK64FX512VMD12/MK66FX1M0VMD18.
+Second or third can be accessed by the object analogComparator1 or
+analogComparator2 respectively.
+AIN- and AIN+ are respectively called INM and INP in freescale's terminology
+and both of these can be assigned to following signals.
+analogComparator (CMP0):
+- 0. CMP0_IN0                 (K64/66Pin C8  = TeensyPin 11)
+- 1. CMP0_IN1                 (K64/66Pin B8  = TeensyPin 12)
+- 2. CMP0_IN2                 (K64/66Pin A8  = TeensyPin 35)
+- 3. CMP0_IN3                 (K64/66Pin D7  = TeensyPin 36)
+- 4. 12-bit DAC1_OUT/CMP0_IN4 (K64/66Pin L4  = TeensyPin 67/A22/DAC1)
+- 5. VREF Output/CMP0_IN5     (K64/66Pin M3)
+- 6. Bandgap
+- 7. 6b DAC0 Reference
+analogComparator1 (CMP1):
+- 0. CMP1_IN0                 (K64/66Pin A12 = TeensyPin 23)
+- 1. CMP1_IN1                 (K64/66Pin A11 = TeensyPin 9)
+- 2. ADC0_SE16/CMP1_IN2       (K64/66Pin J3  = N/C)
+- 3. 12-bit DAC0_OUT/CMP1_IN3 (K64/66Pin L3  = TeensyPin 66/A21/DAC0)
+- 5. VREF Output/CMP1_IN5     (K64/66Pin M3) 
+- 6. Bandgap
+- 7. 6b DAC1 Reference
+analogComparator2 (CMP2):
+- 0. CMP2_IN0                 (K64/66Pin K9  = TeensyPin 3)
+- 1. CMP2_IN1                 (K64/66Pin J9  = TeensyPin 4)
+- 2. ADC1_SE16/CMP2_IN2       (K64/66Pin K3  = N/C)
+- 3. 12-bit DAC1_OUT/CMP2_IN3 (K64/66Pin L4  = TeensyPin 67/A22/DAC1)
+- 6. Bandgap
+*********************
 Licence
 
 This library is free software; you can redistribute it and/or modify it
@@ -147,4 +228,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ***********************
 Document revision
 
+9th revision: 2016/12/10
+8th revision: 2014/10/20
 7th revision: 2013/07/30
