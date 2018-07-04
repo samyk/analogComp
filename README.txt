@@ -16,6 +16,8 @@ Additional improvements by Samy Kamkar <code@samy.pl> / https://samy.pl
 ***********************
 Version history
 
+v. 1.3.5:  add getOutputFast() (Teensy-only)
+v. 1.3.4:  add getOutput() & configureDac() (Teensy-only)
 v. 1.3.3:  MK64FX512VMD12 (Teensy 3.5) and MK66FX1M0VMD18 (Teensy 3.6) support
 v. 1.3.2:  ATtiny441/841 and ATtiny1634 support
            fixed a bug in handling digital buffer (changed to no touch at all)
